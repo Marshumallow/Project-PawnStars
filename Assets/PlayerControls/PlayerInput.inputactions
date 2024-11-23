@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reset",
+                    "type": "Button",
+                    "id": "a452d2ae-1bc0-4b01-af49-0fda7f4b02f0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -90,6 +99,17 @@
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afb35437-74fd-41d5-88b0-385d640a0df7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -101,15 +121,6 @@
                     "name": "LookAround",
                     "type": "PassThrough",
                     "id": "5c384bb9-0e44-4da2-9a43-1d158692461d",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MousePosition",
-                    "type": "PassThrough",
-                    "id": "06ec433f-402a-4314-a780-8709c5de5d8b",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -145,17 +156,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Inspection",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7b29a6f3-0e2f-4a12-bca1-07ab2363cb8e",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MousePosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

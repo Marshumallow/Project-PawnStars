@@ -6,21 +6,45 @@ using UnityEngine.Events;
 public class Interactable : MonoBehaviour
 {
     [SerializeField] public Outline outline;
-    [SerializeField] public Camera playerView;
+    [SerializeField] public GameObject HoldPos;
+
+    [SerializeField] public Vector3 resetPos;
+    [SerializeField] public Vector3 curretPosition;
+
+    [SerializeField] public bool isHeld;
 
     [field:SerializeField] public string message;
 
     public UnityEvent OnInteraction;
+    public UnityEvent OnReset;
 
     private void Awake()
     {
         outline = GetComponent<Outline>();
         DisableOutline();
+        resetPos = this.gameObject.transform.position;
+    }
+
+    private void Update()
+    {
+        if (isHeld == true)
+        {
+            this.gameObject.transform.position = HoldPos.transform.position;
+        }
+        else
+        {
+            this.gameObject.transform.position = resetPos;
+        }
     }
 
     public void Interact()
     {
         OnInteraction.Invoke();
+    }
+
+    public void ResetInteract()
+    {
+        OnReset.Invoke();
     }
 
     public void DisableOutline()
@@ -35,6 +59,11 @@ public class Interactable : MonoBehaviour
 
     public void HoldTool()
     {
+        isHeld = true;
+    }
 
+    public void ResetTool()
+    {
+        isHeld = false;
     }
 }

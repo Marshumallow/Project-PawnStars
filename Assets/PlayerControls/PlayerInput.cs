@@ -44,6 +44,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""a452d2ae-1bc0-4b01-af49-0fda7f4b02f0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afb35437-74fd-41d5-88b0-385d640a0df7"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -123,15 +143,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""LookAround"",
                     ""type"": ""PassThrough"",
                     ""id"": ""5c384bb9-0e44-4da2-9a43-1d158692461d"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MousePosition"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""06ec433f-402a-4314-a780-8709c5de5d8b"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -169,17 +180,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Inspection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7b29a6f3-0e2f-4a12-bca1-07ab2363cb8e"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MousePosition"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -190,10 +190,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Walk = m_Keyboard.FindAction("Walk", throwIfNotFound: true);
         m_Keyboard_Interact = m_Keyboard.FindAction("Interact", throwIfNotFound: true);
+        m_Keyboard_Reset = m_Keyboard.FindAction("Reset", throwIfNotFound: true);
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_LookAround = m_Mouse.FindAction("LookAround", throwIfNotFound: true);
-        m_Mouse_MousePosition = m_Mouse.FindAction("MousePosition", throwIfNotFound: true);
         m_Mouse_Inspection = m_Mouse.FindAction("Inspection", throwIfNotFound: true);
     }
 
@@ -264,12 +264,14 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
     private readonly InputAction m_Keyboard_Walk;
     private readonly InputAction m_Keyboard_Interact;
+    private readonly InputAction m_Keyboard_Reset;
     public struct KeyboardActions
     {
         private @PlayerInput m_Wrapper;
         public KeyboardActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Walk => m_Wrapper.m_Keyboard_Walk;
         public InputAction @Interact => m_Wrapper.m_Keyboard_Interact;
+        public InputAction @Reset => m_Wrapper.m_Keyboard_Reset;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -285,6 +287,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Reset.started += instance.OnReset;
+            @Reset.performed += instance.OnReset;
+            @Reset.canceled += instance.OnReset;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -295,6 +300,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Reset.started -= instance.OnReset;
+            @Reset.performed -= instance.OnReset;
+            @Reset.canceled -= instance.OnReset;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -317,14 +325,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Mouse;
     private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
     private readonly InputAction m_Mouse_LookAround;
-    private readonly InputAction m_Mouse_MousePosition;
     private readonly InputAction m_Mouse_Inspection;
     public struct MouseActions
     {
         private @PlayerInput m_Wrapper;
         public MouseActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @LookAround => m_Wrapper.m_Mouse_LookAround;
-        public InputAction @MousePosition => m_Wrapper.m_Mouse_MousePosition;
         public InputAction @Inspection => m_Wrapper.m_Mouse_Inspection;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
@@ -338,9 +344,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @LookAround.started += instance.OnLookAround;
             @LookAround.performed += instance.OnLookAround;
             @LookAround.canceled += instance.OnLookAround;
-            @MousePosition.started += instance.OnMousePosition;
-            @MousePosition.performed += instance.OnMousePosition;
-            @MousePosition.canceled += instance.OnMousePosition;
             @Inspection.started += instance.OnInspection;
             @Inspection.performed += instance.OnInspection;
             @Inspection.canceled += instance.OnInspection;
@@ -351,9 +354,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @LookAround.started -= instance.OnLookAround;
             @LookAround.performed -= instance.OnLookAround;
             @LookAround.canceled -= instance.OnLookAround;
-            @MousePosition.started -= instance.OnMousePosition;
-            @MousePosition.performed -= instance.OnMousePosition;
-            @MousePosition.canceled -= instance.OnMousePosition;
             @Inspection.started -= instance.OnInspection;
             @Inspection.performed -= instance.OnInspection;
             @Inspection.canceled -= instance.OnInspection;
@@ -378,11 +378,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     {
         void OnWalk(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnReset(InputAction.CallbackContext context);
     }
     public interface IMouseActions
     {
         void OnLookAround(InputAction.CallbackContext context);
-        void OnMousePosition(InputAction.CallbackContext context);
         void OnInspection(InputAction.CallbackContext context);
     }
 }

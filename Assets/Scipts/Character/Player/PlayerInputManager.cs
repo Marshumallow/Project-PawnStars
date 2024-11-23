@@ -13,6 +13,7 @@ public class PlayerInputManager : MonoBehaviour
 
     [SerializeField] public UnityEvent OnClick;
     [SerializeField] public UnityEvent OnInteract;
+    [SerializeField] public UnityEvent OnReset;
 
     //WASD keyboard movement
     [SerializeField] public Vector2 moveInput;
@@ -61,13 +62,18 @@ public class PlayerInputManager : MonoBehaviour
 
             playerInput.Keyboard.Walk.performed += i => moveInput = i.ReadValue<Vector2>();
             playerInput.Mouse.LookAround.performed += i => mouseInput = i.ReadValue<Vector2>();
-            playerInput.Mouse.MousePosition.performed += i => mousePosition = i.ReadValue<Vector2>();
             playerInput.Keyboard.Interact.performed += RunInteractButton;
-            playerInput.Mouse.Inspection.performed += RunMouseClick;
+            playerInput.Keyboard.Reset.performed += RunResetButton;
+            //playerInput.Mouse.Inspection.performed += RunMouseClick;
 
         }
 
         playerInput.Enable();
+    }
+
+    private void Reset_performed(InputAction.CallbackContext obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     private void OnDestroy()
@@ -114,5 +120,10 @@ public class PlayerInputManager : MonoBehaviour
     private void RunInteractButton(InputAction.CallbackContext context)
     {
         OnInteract.Invoke();
+    }
+
+    private void RunResetButton(InputAction.CallbackContext context)
+    {
+        OnReset.Invoke();
     }
 }

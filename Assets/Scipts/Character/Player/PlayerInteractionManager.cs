@@ -33,13 +33,21 @@ public class PlayerInteractionManager : MonoBehaviour
         }
     }
 
-    public void EnableText(string text)
+    public void DeselectGameObject()
+    {
+        if (currentInteractable != null)
+        {
+            currentInteractable.ResetInteract();
+        }
+    }
+
+    private void EnableText(string text)
     {
         interactText.text = text + " (E)";
         interactText.gameObject.SetActive(true);
     }
 
-    public void DisableText()
+    private void DisableText()
     {
         interactText.gameObject.SetActive(false);
     }
