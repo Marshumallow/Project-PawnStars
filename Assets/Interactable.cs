@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
+    [SerializeField] public PlayerInteractionManager playerInteractionManager;
     [SerializeField] public Outline outline;
     [SerializeField] public GameObject HoldPos;
 

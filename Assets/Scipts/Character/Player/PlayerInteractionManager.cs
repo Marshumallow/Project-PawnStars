@@ -41,13 +41,13 @@ public class PlayerInteractionManager : MonoBehaviour
         }
     }
 
-    private void EnableText(string text)
+    public void EnableText(string text)
     {
         interactText.text = text + " (E)";
         interactText.gameObject.SetActive(true);
     }
 
-    private void DisableText()
+    public void DisableText()
     {
         interactText.gameObject.SetActive(false);
     }

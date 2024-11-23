@@ -46,6 +46,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""RotateItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""43b6fb1c-e552-473e-8005-f88abe7a6df9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Reset"",
                     ""type"": ""Button"",
                     ""id"": ""a452d2ae-1bc0-4b01-af49-0fda7f4b02f0"",
@@ -132,6 +141,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Reset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b760290-9020-489e-9357-e87984b56557"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -190,6 +210,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Walk = m_Keyboard.FindAction("Walk", throwIfNotFound: true);
         m_Keyboard_Interact = m_Keyboard.FindAction("Interact", throwIfNotFound: true);
+        m_Keyboard_RotateItem = m_Keyboard.FindAction("RotateItem", throwIfNotFound: true);
         m_Keyboard_Reset = m_Keyboard.FindAction("Reset", throwIfNotFound: true);
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
@@ -264,6 +285,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
     private readonly InputAction m_Keyboard_Walk;
     private readonly InputAction m_Keyboard_Interact;
+    private readonly InputAction m_Keyboard_RotateItem;
     private readonly InputAction m_Keyboard_Reset;
     public struct KeyboardActions
     {
@@ -271,6 +293,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public KeyboardActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Walk => m_Wrapper.m_Keyboard_Walk;
         public InputAction @Interact => m_Wrapper.m_Keyboard_Interact;
+        public InputAction @RotateItem => m_Wrapper.m_Keyboard_RotateItem;
         public InputAction @Reset => m_Wrapper.m_Keyboard_Reset;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
@@ -287,6 +310,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @RotateItem.started += instance.OnRotateItem;
+            @RotateItem.performed += instance.OnRotateItem;
+            @RotateItem.canceled += instance.OnRotateItem;
             @Reset.started += instance.OnReset;
             @Reset.performed += instance.OnReset;
             @Reset.canceled += instance.OnReset;
@@ -300,6 +326,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @RotateItem.started -= instance.OnRotateItem;
+            @RotateItem.performed -= instance.OnRotateItem;
+            @RotateItem.canceled -= instance.OnRotateItem;
             @Reset.started -= instance.OnReset;
             @Reset.performed -= instance.OnReset;
             @Reset.canceled -= instance.OnReset;
@@ -378,6 +407,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     {
         void OnWalk(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnRotateItem(InputAction.CallbackContext context);
         void OnReset(InputAction.CallbackContext context);
     }
     public interface IMouseActions
