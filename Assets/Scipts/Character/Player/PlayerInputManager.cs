@@ -12,6 +12,7 @@ public class PlayerInputManager : MonoBehaviour
     [SerializeField] public PlayerInput playerInput;
 
     [SerializeField] public UnityEvent OnClick;
+    [SerializeField] public UnityEvent OnInteract;
 
     //WASD keyboard movement
     [SerializeField] public Vector2 moveInput;
@@ -58,10 +59,11 @@ public class PlayerInputManager : MonoBehaviour
         {
             playerInput = new PlayerInput();
 
-            playerInput.PlayerMovement.Walk.performed += i => moveInput = i.ReadValue<Vector2>();
-            playerInput.PlayerLook.LookAround.performed += i => mouseInput = i.ReadValue<Vector2>();
-            playerInput.PlayerLook.MousePosition.performed += i => mousePosition = i.ReadValue<Vector2>();
-            playerInput.PlayerLook.Inspection.performed += RunMouseClick;
+            playerInput.Keyboard.Walk.performed += i => moveInput = i.ReadValue<Vector2>();
+            playerInput.Mouse.LookAround.performed += i => mouseInput = i.ReadValue<Vector2>();
+            playerInput.Mouse.MousePosition.performed += i => mousePosition = i.ReadValue<Vector2>();
+            playerInput.Keyboard.Interact.performed += RunInteractButton;
+            playerInput.Mouse.Inspection.performed += RunMouseClick;
 
         }
 
@@ -88,11 +90,11 @@ public class PlayerInputManager : MonoBehaviour
         moveValue = Mathf.Clamp01(Mathf.Abs(verticalKeyInput) + Mathf.Abs(horizontalKeyInput));
 
         //moveValue is either 0, 0.5 or 1 for smoother movement
-        if (moveValue <=0.5 && moveValue > 0)
+        if (moveValue <= 0.5 && moveValue > 0)
         {
             moveValue = 0.5f;
         }
-        else if(moveValue > 0.5 && moveValue <= 1)
+        else if (moveValue > 0.5 && moveValue <= 1)
         {
             moveValue = 1;
         }
@@ -107,5 +109,10 @@ public class PlayerInputManager : MonoBehaviour
     private void RunMouseClick(InputAction.CallbackContext context)
     {
         OnClick.Invoke();
+    }
+
+    private void RunInteractButton(InputAction.CallbackContext context)
+    {
+        OnInteract.Invoke();
     }
 }

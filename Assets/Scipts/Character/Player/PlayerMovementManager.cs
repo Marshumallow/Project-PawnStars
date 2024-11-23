@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerMovementManager : CharacterMovementManager
 {
-    [SerializeField] public PlayerManager player;
     [SerializeField] public GameObject playerObject;
     [SerializeField] public Camera playerView;
+    [SerializeField] public CharacterController playerController;
 
     [SerializeField] public float verticalMovement;
     [SerializeField] public float horizontalMovement;
@@ -32,7 +32,6 @@ public class PlayerMovementManager : CharacterMovementManager
         //Awake function is overridden from Character Movement Manager
         base.Awake();
 
-        player = GetComponent<PlayerManager>();
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -64,13 +63,13 @@ public class PlayerMovementManager : CharacterMovementManager
         if (PlayerInputManager.Instance.moveValue > 0.5f)
         {
             //running speed
-            player.characterController.Move(moveDirection * runSpeed * Time.deltaTime);
+            playerController.Move(moveDirection * runSpeed * Time.deltaTime);
             
         }
         else if (PlayerInputManager.Instance.moveValue <= 0.5f)
         {
             //walking speed
-            player.characterController.Move(moveDirection * walkSpeed * Time.deltaTime);
+            playerController.Move(moveDirection * walkSpeed * Time.deltaTime);
         }
     }
 
